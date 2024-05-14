@@ -1,0 +1,283 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Book {
+    private String title;
+    private String author;
+    private String isbn;
+
+    public Book(String title, String author, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", isbn='" + isbn + '\'' +
+                '}';
+    }
+}
+
+class User {
+    private String name;
+    private int id;
+
+    public User(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                '}';
+    }
+}
+
+class Library {
+    private List<Book> books;
+    private List<User> users;
+
+    public Library() {
+        books = new ArrayList<>();
+        users = new ArrayList<>();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void borrowBook(User user, Book book) {
+        System.out.println(user.getName() + " borrowed " + book.getTitle());
+    }
+
+    public void returnBook(User user, Book book) {
+        System.out.println(user.getName() + " returned " + book.getTitle());
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Library library = new Library();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("1. Add Book");
+            System.out.println("2. Add User");
+            System.out.println("3. Borrow Book");
+            System.out.println("4. Return Book");
+            System.out.println("5. Display Books");
+            System.out.println("6. Display Users");
+            System.out.println("7. Exit");
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter book title: ");
+                    String title = scanner.next();
+                    System.out.print("Enter author name: ");
+                    String author = scanner.next();
+                    System.out.print("Enter ISBN: ");
+                    String isbn = scanner.next();
+                    library.addBook(new Book(title, author, isbn));
+                    break;
+                case 2:
+                    System.out.print("Enter user name: ");
+                    String name = scanner.next();
+                    System.out.print("Enter user ID: ");
+                    int id = scanner.nextInt();
+                    library.addUser(new User(name, id));
+                    break;
+                case 3:
+                    library.getUsers().forEach(System.out::println);
+                    System.out.print("Enter user ID: ");
+                    int userId = scanner.nextInt();
+                    User user = library.getUsers().stream().filter(u -> u.getId() == userId).findFirst().orElse(null);
+                    if (user == null) {
+                        System.out.println("User not found!");
+                        break;
+                    }
+                    library.getBooks().forEach(System.out::println);
+                    System.out.print("Enter book ISBN: ");
+                    String bookIsbn = scanner.next();
+                    Book borrowedBook = library.getBooks().stream().filter(b -> b.getIsbn().equals(bookIsbn)).findFirst().orElse(null);
+                    if (borrowedBook == null) {
+                        System.out.println("Book not found!");
+                        break;
+                    }
+                    library.borrowBook(user, borrowedBook);
+                    break;
+                case 4:
+                    library.getUsers().forEach(System.out::println);
+                    System.out.print("Enter user ID: ");
+                    int returnUserId = scanner.nextInt();
+                    User returnUser = library.getUsers().stream().filter(u -> u.getId() == returnUserId).findFirst().orElse(null);
+                    if (returnUser == null) {
+                        System.out.println("User not found!");
+                        break;
+                    }
+                    library.getBooks().forEach(System.out::println);
+                    System.out.print("Enter book ISBN: ");
+                    String returnBookIsbn = scanner.next();
+                    Book returnedBook = library.getBooks().stream().filter(b -> b.getIsbn().equals(returnBookIsbn)).findFirst().orElse(null);
+                    if (returnedBook == null) {
+                        System.out.println("Book not found!");
+                        break;
+                    }
+                    library.returnBook(returnUser, returnedBook);
+                    break;
+                case 5:
+                    library.getBooks().forEach(System.out::println);
+                    break;
+                case 6:
+                    library.getUsers().forEach(System.out::println);
+                    break;
+                case 7:
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        }
+    }
+}
+
+
+/*output for this program
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 1
+Enter book title: Java Programming
+Enter author name: John Doe
+Enter ISBN: 1234567890
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 1
+Enter book title: Data Structures
+Enter author name: Jane Smith
+Enter ISBN: 0987654321
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 2
+Enter user name: Alice
+Enter user ID: 1
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 2
+Enter user name: Bob
+Enter user ID: 2
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 3
+User{name='Alice', id=1}
+Enter user ID: 1
+Book{title='Java Programming', author='John Doe', isbn='1234567890'}
+Book{title='Data Structures', author='Jane Smith', isbn='0987654321'}
+Enter book ISBN: 1234567890
+Alice borrowed Java Programming
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 5
+Book{title='Java Programming', author='John Doe', isbn='1234567890'}
+Book{title='Data Structures', author='Jane Smith', isbn='0987654321'}
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 6
+User{name='Alice', id=1}
+User{name='Bob', id=2}
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 4
+User{name='Alice', id=1}
+Enter user ID: 1
+Book{title='Java Programming', author='John Doe', isbn='1234567890'}
+Book{title='Data Structures', author='Jane Smith', isbn='0987654321'}
+Enter book ISBN: 1234567890
+Alice returned Java Programming
+1. Add Book
+2. Add User
+3. Borrow Book
+4. Return Book
+5. Display Books
+6. Display Users
+7. Exit
+Enter your choice: 7  */
